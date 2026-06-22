@@ -110,7 +110,7 @@ The first command removes any existing containers and database volumes to ensure
 
 | Service     | URL                        |
 | ----------- | -------------------------- |
-| Frontend    | http://localhost:3000      |
+| Frontend    | http://localhost:3331     |
 | Backend API | http://localhost:8000      |
 | Swagger UI  | http://localhost:8000/docs |
 
