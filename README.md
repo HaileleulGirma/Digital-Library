@@ -98,11 +98,8 @@ cd Digital-Library
 From the project root:
 
 ```bash
-docker compose down -v
 docker compose up --build
 ```
-
-The first command removes any existing containers and database volumes to ensure a clean start.
 
 ---
 
