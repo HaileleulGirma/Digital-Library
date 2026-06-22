@@ -57,7 +57,8 @@ PostgreSQL Database
 
 Authentication is completely stateless. After a successful login, the backend issues a JWT containing the user's identity and role. The frontend stores this token in memory and sends it with each authenticated request.
 
-The Diagram below describes the whole architecture.
+The diagram below illustrates the overall system architecture and authentication flow.
+
 <p align="center">
   <img src="./images/Auth-Flow-Diagram.png" alt="System Architecture Diagram" width="900">
 </p>
@@ -153,9 +154,9 @@ Documents store the roles allowed to access them using PostgreSQL's **JSONB** ty
 
 Protected endpoints use FastAPI dependencies to verify both authentication and authorization before any business logic executes.
 
-A custom `RoleChecker` dependency compares the role stored in the JWT against the roles allowed for a particular endpoint. Unauthorized requests immediately receive a **403 Forbidden** response.
+To satisfy the requirement for custom RBAC middleware, I implemented a custom callable class named `RoleChecker`. This dependency intercepts incoming requests, validates and decodes the JWT, and compares the user's role against a predefined list of allowed roles for each endpoint. If the role is not authorized, the request is immediately rejected with a **403 Forbidden** response.
 
-This keeps permission checks centralized and avoids repeating authorization logic throughout the application.
+By keeping the authorization logic inside this reusable dependency, the endpoint implementations remain clean, consistent, and free from duplicated permission checks without relying on any third-party RBAC library.
 
 ---
 
@@ -171,7 +172,7 @@ React Context stores the authenticated user's information, allowing components t
 
 Docker Compose manages the frontend, backend, and PostgreSQL database as separate services connected through Docker's internal network.
 
-The database schema is automatically initialized during container startup, so no manual database setup is required before running the application.
+The database schema, **including the insertion of the default system roles (`admin`, `editor`, and `viewer`)**, is automatically initialized during container startup. No manual database setup is required before running the application.
 
 ---
 
